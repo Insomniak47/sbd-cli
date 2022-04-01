@@ -1,5 +1,5 @@
 [package]
-name = "sbd"
+name = "sbd-cli"
 version = "0.1.0"
 edition = "2021"
 authors = ["Insomniak47"]
