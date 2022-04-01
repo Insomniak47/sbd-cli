@@ -2,8 +2,10 @@
 name = "sbd"
 version = "0.1.0"
 edition = "2021"
-
+authors = ["Insomniak47"]
+description = "A tool to make your '(S)hitty (B)lock (D)iagrams look a little nicer"
+readme = "README.md"
+license = "MIT"
+keywords = ["diagrams", "block-diagrams","ascii"]
+categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
-[dependencies]
-clap = "3.1.6"

@@ -1,4 +1,4 @@
-use std::{io::{self}};
+use std::io;
 
 fn main() {
     let lines = read_all_lines();
