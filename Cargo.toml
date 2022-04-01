@@ -1,6 +1,6 @@
 [package]
 name = "sbd-cli"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2021"
 authors = ["Insomniak47"]
 description = "A tool to make your '(S)hitty (B)lock (D)iagrams look a little nicer"
@@ -9,3 +9,7 @@ license = "MIT"
 keywords = ["diagrams", "block-diagrams","ascii"]
 categories = ["command-line-utilities"]
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "sbd"
+path="src/main.rs"
