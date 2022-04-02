@@ -129,8 +129,8 @@ fn translate_dashy(loc: &Location) -> Option<char> {
         ['|', '-', '-', ' ', ' '] => Some('┘'),
         [' ', ' ', '-', '-', '|'] => Some('┌'),
         ['|', ' ', '-', '-', ' '] => Some('└'),
-        [' ', '-', '-', '-', '|'] => Some('┬'),
-        ['|', '-', '-', '-', ' '] => Some('┴'),
+        [z, x, '-', y, '|']  if !x.is_whitespace() && !y.is_whitespace() && (z.is_whitespace() || z == '-')  => Some('┬'),
+        ['|', x, '-', y, z]  if !x.is_whitespace() && !y.is_whitespace() && (z.is_whitespace() || z == '-') => Some('┴'),
         ['|', '-', '-', '-', '|'] => Some('┼'),
         _ => Some('─')
     }
