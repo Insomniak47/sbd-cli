@@ -139,14 +139,9 @@ fn read_all_lines_vec() -> Vec<Vec<char>> {
     buf.reserve(4096);
     let stdin = io::stdin();
 
-    let now = Instant::now();
     _ = stdin.lock().read_to_string(&mut buf);
 
-    let read_time = now.elapsed();
-    let v =buf.split('\n').map(|s| { format!(" {} ",s).chars().collect()}).collect::<Vec<Vec<char>>>();
-    println!("Time spent reading {}ms", read_time.as_millis());
-    println!("Time spend splitting: {}ms", (now.elapsed() - read_time).as_millis());
-    v
+    buf.split('\n').map(|s| { format!(" {} ",s).chars().collect()}).collect()
 }
 
 
