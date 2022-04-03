@@ -141,7 +141,7 @@ fn read_all_lines_vec() -> Vec<Vec<char>> {
 
     _ = stdin.lock().read_to_string(&mut buf);
 
-    buf.split('\n').map(|s| { format!(" {} ",s).chars().collect()}).collect()
+    buf.split('\n').map(|s| { format!(" {}",s.trim_end()).chars().collect()}).collect()
 }
 
 
