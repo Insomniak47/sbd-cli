@@ -7,13 +7,13 @@ use std::{collections::HashMap, io, vec};
 extern crate lazy_static;
 
 lazy_static! {
-    static ref DASH_LOOKUP: HashMap<DFlags, char> = vec![
-        (DFlags::TOP | DFlags::RIGHT | DFlags::BOTTOM, '├'),
-        (DFlags::TOP | DFlags::LEFT | DFlags::BOTTOM, '┤'),
-        (DFlags::TOP | DFlags::LEFT, '┘'),
-        (DFlags::TOP | DFlags::RIGHT, '└'),
-        (DFlags::LEFT | DFlags::BOTTOM, '┐'),
-        (DFlags::RIGHT | DFlags::BOTTOM, '┌')
+    static ref DASH_LOOKUP: HashMap<DirFlags, char> = vec![
+        (DirFlags::TOP | DirFlags::RIGHT | DirFlags::BOTTOM, '├'),
+        (DirFlags::TOP | DirFlags::LEFT | DirFlags::BOTTOM, '┤'),
+        (DirFlags::TOP | DirFlags::LEFT, '┘'),
+        (DirFlags::TOP | DirFlags::RIGHT, '└'),
+        (DirFlags::LEFT | DirFlags::BOTTOM, '┐'),
+        (DirFlags::RIGHT | DirFlags::BOTTOM, '┌')
     ]
     .iter()
     .copied()
@@ -21,13 +21,13 @@ lazy_static! {
 }
 
 lazy_static! {
-    static ref PIPE_LOOKUP: HashMap<DFlags, char> = vec![
-        (DFlags::TOP | DFlags::RIGHT | DFlags::BOTTOM, '├'),
-        (DFlags::TOP | DFlags::LEFT | DFlags::BOTTOM, '┤'),
-        (DFlags::TOP | DFlags::LEFT, '┘'),
-        (DFlags::TOP | DFlags::RIGHT, '└'),
-        (DFlags::LEFT | DFlags::BOTTOM, '┐'),
-        (DFlags::RIGHT | DFlags::BOTTOM, '┌'),
+    static ref PIPE_LOOKUP: HashMap<DirFlags, char> = vec![
+        (DirFlags::TOP | DirFlags::RIGHT | DirFlags::BOTTOM, '├'),
+        (DirFlags::TOP | DirFlags::LEFT | DirFlags::BOTTOM, '┤'),
+        (DirFlags::TOP | DirFlags::LEFT, '┘'),
+        (DirFlags::TOP | DirFlags::RIGHT, '└'),
+        (DirFlags::LEFT | DirFlags::BOTTOM, '┐'),
+        (DirFlags::RIGHT | DirFlags::BOTTOM, '┌'),
     ]
     .iter()
     .copied()
@@ -52,8 +52,8 @@ fn main() {
     let mut lookup_time = Duration::default();
     let mut jiggy_time = Duration::default();
     let exec_anchor = Instant::now();
-    let mut new_lines = Vec::new();
-    new_lines.reserve(lines.len());
+    let mut new_lines = Vec::with_capacity(lines.len());
+    
     for (index, line) in lines.iter().enumerate() {
 
         let mut new_line = String::new();
@@ -178,17 +178,17 @@ impl Location {
     }
 }
 
-fn connecty_bits_flags(loc: &Location) -> DFlags {
+fn connecty_bits_flags(loc: &Location) -> DirFlags {
     loc.family
         .iter()
         .enumerate()
         .map(|(i, v)| {
             let dirn = match i {
                 //CN: Directions to center
-                0 => DFlags::BOTTOM,
-                1 => DFlags::RIGHT,
-                2 => DFlags::LEFT,
-                3 => DFlags::TOP,
+                0 => DirFlags::BOTTOM,
+                1 => DirFlags::RIGHT,
+                2 => DirFlags::LEFT,
+                3 => DirFlags::TOP,
                 _ => unreachable!(),
             };
 
@@ -206,12 +206,12 @@ fn connecty_bits_flags(loc: &Location) -> DFlags {
             }
         })
         .filter_map(|x| x)
-        .fold(DFlags::default(), |x, v| x | v)
+        .fold(DirFlags::default(), |x, v| x | v)
 }
 
 bitflags! {
     #[derive(Default)]
-    struct DFlags : u8 {
+    struct DirFlags : u8 {
         const TOP    = 0b0001;
         const LEFT   = 0b0010;
         const RIGHT  = 0b0100;
@@ -264,24 +264,24 @@ impl Direction {
     }
 }
 
-impl Into<DFlags> for Direction {
-    fn into(self) -> DFlags {
+impl Into<DirFlags> for Direction {
+    fn into(self) -> DirFlags {
         match self {
-            Direction::Top => DFlags::TOP,
-            Direction::Left => DFlags::LEFT,
-            Direction::Right => DFlags::RIGHT,
-            Direction::Bottom => DFlags::BOTTOM,
+            Direction::Top => DirFlags::TOP,
+            Direction::Left => DirFlags::LEFT,
+            Direction::Right => DirFlags::RIGHT,
+            Direction::Bottom => DirFlags::BOTTOM,
         }
     }
 }
 
-impl Into<Direction> for DFlags {
+impl Into<Direction> for DirFlags {
     fn into(self) -> Direction {
         match self {
-            DFlags::TOP => Direction::Top,
-            DFlags::LEFT => Direction::Left,
-            DFlags::RIGHT => Direction::Right,
-            DFlags::BOTTOM => Direction::Bottom,
+            DirFlags::TOP => Direction::Top,
+            DirFlags::LEFT => Direction::Left,
+            DirFlags::RIGHT => Direction::Right,
+            DirFlags::BOTTOM => Direction::Bottom,
             _ => unreachable!(),
         }
     }
@@ -295,8 +295,8 @@ trait Connectable {
 
 trait ConnectableFlags {
     fn is_connectable(&self) -> bool;
-    fn can_connect_from(&self, dirn: DFlags) -> bool;
-    fn should_bridge_from(&self, dirn: DFlags) -> bool;
+    fn can_connect_from(&self, dirn: DirFlags) -> bool;
+    fn should_bridge_from(&self, dirn: DirFlags) -> bool;
 }
 
 //The concept of creating a branch is different than terminating a branch.
