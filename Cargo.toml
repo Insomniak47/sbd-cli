@@ -1,6 +1,6 @@
 [package]
 name = "sbd-cli"
-version = "0.1.3"
+version = "0.1.4"
 edition = "2021"
 authors = ["Insomniak47"]
 description = "A tool to make your '(S)hitty (B)lock (D)iagrams look a little nicer"
