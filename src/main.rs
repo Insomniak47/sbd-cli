@@ -1,7 +1,7 @@
-use std::io::Read;
 use bitflags::bitflags;
-use std::time::{Instant, Duration};
-use std::{env};
+use std::env;
+use std::io::Read;
+use std::time::{Duration, Instant};
 use std::{collections::HashMap, io, vec};
 #[macro_use]
 extern crate lazy_static;
@@ -10,6 +10,8 @@ lazy_static! {
     static ref DASH_LOOKUP: HashMap<DirFlags, char> = vec![
         (DirFlags::TOP | DirFlags::RIGHT | DirFlags::BOTTOM, '├'),
         (DirFlags::TOP | DirFlags::LEFT | DirFlags::BOTTOM, '┤'),
+        (DirFlags::LEFT | DirFlags::RIGHT | DirFlags::BOTTOM, '┬'),
+        (DirFlags::LEFT | DirFlags::RIGHT | DirFlags::TOP, '┴'),
         (DirFlags::TOP | DirFlags::LEFT, '┘'),
         (DirFlags::TOP | DirFlags::RIGHT, '└'),
         (DirFlags::LEFT | DirFlags::BOTTOM, '┐'),
@@ -53,9 +55,8 @@ fn main() {
     let mut jiggy_time = Duration::default();
     let exec_anchor = Instant::now();
     let mut new_lines = Vec::with_capacity(lines.len());
-    
-    for (index, line) in lines.iter().enumerate() {
 
+    for (index, line) in lines.iter().enumerate() {
         let mut new_line = String::new();
         for (i, c) in line.iter().enumerate() {
             let now = Instant::now();
@@ -87,7 +88,7 @@ fn main() {
         println!("│{}│", line);
     }
 
-    if let  Ok(x) = env::var("SBD_DIAG"){
+    if let Ok(x) = env::var("SBD_DIAG") {
         if x != "true" {
             return;
         }
@@ -141,9 +142,10 @@ fn read_all_lines_vec() -> Vec<Vec<char>> {
 
     _ = stdin.lock().read_to_string(&mut buf);
 
-    buf.split('\n').map(|s| { format!(" {}",s.trim_end()).chars().collect()}).collect()
+    buf.split('\n')
+        .map(|s| format!(" {}", s.trim_end()).chars().collect())
+        .collect()
 }
-
 
 #[derive(Debug)]
 struct Location {
@@ -216,6 +218,8 @@ bitflags! {
 
 fn translate_dashy_lookup(loc: &Location) -> Option<char> {
     match DASH_LOOKUP.get(&connecty_bits_flags(loc)) {
+        // Some(x) => x.into::<char>(),
+        // None => '🔥'
         Some(x) => Some(*x),
         _ => Some('─'),
     }

@@ -20,7 +20,7 @@ Laptop-----------USB-C---------------------------------|                        
        |                                                                          |--- USB-A ---> Yubi
        |                                                                          ---- USB-A ---> Mic   
        |
-       |--------TB4--------> Dock (when it gets here) --- DP -------> DELL 24"
+       |--------TB4--------> Dock (when it gets here)---- DP -------> DELL 24"
        |                                              |-- DP -------> BENQ 24"
        |                                              |-- USB-A-----> WebCam
        |                                              ----Maybe???--> USB-C to 4x USB-A (3.0) hub??
