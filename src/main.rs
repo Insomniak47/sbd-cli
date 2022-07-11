@@ -325,7 +325,7 @@ impl Connectable for char {
             '>' => dirn == Direction::Left,
             '<' => dirn == Direction::Right,
             '^' => dirn == Direction::Bottom,
-            'v' => dirn == Direction::Bottom,
+            'v' => dirn == Direction::Top,
             x if x.is_whitespace() => false,
             _ => true,
         }
