@@ -169,7 +169,8 @@ impl Location {
         match self.value {
             '-' => translate_dashy_lookup(self),
             '|' => translate_pipey_lookup(self),
-            '>' | '<' | '^' | 'v' => translate_pointy(self),
+            '>' | '<' | '^' => translate_pointy(self),
+            'v' => translate_pointy(self).or(Some('v')),
             x => Some(x),
         }
     }
@@ -233,11 +234,11 @@ fn translate_pipey_lookup(loc: &Location) -> Option<char> {
 }
 
 fn translate_pointy(loc: &Location) -> Option<char> {
-    match loc.family[..] {
-        [_, '-', ..] => Some('►'),
-        [.., '|'] => Some('▲'),
-        [.., '-', _] => Some('►'),
-        ['|', ..] => Some('▼'), //Robert
+    match (&loc.family[..], loc.value) {
+        ([_, '-', ..], '>') => Some('►'),
+        ([.., '|'], '^') => Some('▲'),
+        ([.., '-', _], '<') => Some('◄'),
+        (['|', ..], 'v') => Some('▼'), //Robert
         _ => None,
     }
 
